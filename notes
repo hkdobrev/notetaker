@@ -4,7 +4,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 __usage="
-Usage: $(basename $0) [--help | -h | -?] <command> [<args>]
+Usage: notes [--help | -h | -?] <command> [<args>]
 
 Subcommands:
     new                Create a new note with your EDITOR
@@ -14,7 +14,7 @@ Subcommands:
     search             Search notes for text
 
 Options:
-    -h, -?, --help     Output usage for $(basename $0) or a subcommand
+    -h, -?, --help     Output usage for notes or a subcommand
 "
 
 if [[ $# -lt 1 ]]; then
@@ -27,7 +27,7 @@ SUBCOMMAND=0
 
 while (( "$#" )); do
     if [[ $SUBCOMMAND -eq 1 ]]; then
-        PARAMS="$PARAMS $@"
+        PARAMS="$PARAMS $*"
         break
     fi
     case "$1" in
@@ -35,7 +35,7 @@ while (( "$#" )); do
             echo "$__usage"
             exit 0
             ;;
-        -*|--*=) # unsupported options
+        --*=|-*) # unsupported options
             echo "Error: Unsupported option \"$1\"" >&2
             echo "$__usage" >&2
             exit 1
@@ -56,18 +56,18 @@ done
 # set positional arguments in their proper place
 eval set -- "$PARAMS"
 
-binary="$(basename $0)-$1"
+binary="notes-$1"
 
 set +e
-binary_path=$(which $binary)
+binary_path=$(which "$binary")
 set -e
 
 if [ -z "$binary_path" ]; then
-    echo "Error: Binary "$binary" not found" >&2
+    echo "Error: Binary \"$binary\" not found" >&2
     echo "$__usage" >&2
     exit 1
 fi
 
 shift
 
-$binary_path "$@"
+$binary_path "$*"
