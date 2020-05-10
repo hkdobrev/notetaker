@@ -36,7 +36,7 @@ echo "export NOTES_PATH=~/Documents/my_notes" >> ~/.bash_profile
 
 ## Usage
 
-Run `notes --help` to see command-line usage:
+Run `notes --help` for command-line usage:
 ```shell
 $ notes --help
 Usage: notes [--help | -h | -?] <command> [<args>]
@@ -55,16 +55,14 @@ Options:
 ### Create a note
 
 <details>
-<summary>
-Just save a new Markdown file with the `*.md` extension in your notes directory (`~/notes` by default):
-</summary>
+<summary>Just save a new Markdown file with the `*.md` extension in your notes directory (`~/notes` by default):</summary>
 <pre><code class="language-shell">
-cat > ~/notes/journal-log.md <<EOL
+cat > ~/notes/journal-log.md &lt;&lt;EOF
 # My first journal log
 Here are some action items:
-\- [x] Install notetaker
-\- [ ] Check out notes todos" 
-EOL
+- [ ] Install notetaker
+- [ ] Check out notes todos
+EOF
 </code></pre>
 </details>
 
@@ -79,6 +77,11 @@ journal-log.md:
 
   - [ ] Check out notes todos
 ```
+
+`notes todos --done` would list only the checked todo items
+`notes todos --all` would give you both done and not done todos
+
+Run `notes todos --help` for all usage details.
 
 ## Contributing
 
