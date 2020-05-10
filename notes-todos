@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+IFS=$'\n\t'
+
+__usage="
+Usage: notes todos [--help | -h | -?] [--all | --done] [<folder>...]
+
+\`notes todos\` lists all todos from your notes
+
+Options:
+    -h, -?, --help      Output usage
+    --all, -a           List both done and not done todos
+    --done, -d          List only done todos
+
+Arguments:
+    <folder>            If passed folders inside your \$NOTES_PATH, will search for todos only in those recursively
+
+\$NOTES_PATH defaults to ~/notes.
+
+By default \`notes todos\` will list only not done todos.
+You can filter by using ``--all\` for all todos or \`--done\` for only done todos.
+"
+
+FOLDERS=""
+NOT_DONE=0x1
+DONE=0x10
+MODE=$NOT_DONE
+
+while (( "$#" )); do
+    case "$1" in
+        -h|-'?'|--help)
+            echo "$__usage"
+            exit 0
+            ;;
+        --all|-a)
+            (( MODE|=$DONE ))
+            shift
+            ;;
+        --done|-d)
+            MODE=$DONE
+            shift
+            ;;
+        -*|--*=) # unsupported options
+            echo "Error: Unsupported option \"$1\"" >&2
+            echo "$__usage" >&2
+            exit 1
+            ;;
+        *) # preserve positional arguments
+            FOLDERS="$FOLDERS $1"
+            shift
+            ;;
+    esac
+done
+
+# set positional arguments in their proper place
+eval set -- "$FOLDERS"
+
+notes_source=${NOTES_PATH:-$HOME/notes}
+checked=""
+
+(( ($MODE & $DONE)     != 0 )) && checked="x$checked"
+(( ($MODE & $NOT_DONE) != 0 )) && checked=" $checked"
+
+pattern="\s*-\s*\[[$checked]\]\s*.*"
+
+matching_files=`grep --dereference-recursive --include=\*.md --files-with-matches --extended-regexp --regexp="$pattern" $notes_source`
+
+for filename in $matching_files; do
+    echo
+    echo ${filename#$notes_source/}:
+    echo
+    grep --extended-regexp "$pattern" $filename | sed 's/.*/  &/'
+done
