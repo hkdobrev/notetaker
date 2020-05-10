@@ -7,7 +7,7 @@ The notetaker project aims to help people manage their notes as easily as writin
 **Main ideas behind notetaker**:
 
 - Edit your own files with your favourite program. You can use vim, VS Code, Sublime Text, Caret, Notable as long as you save them in Markdown files with the `.md` extension.
-- Organise your notes in folders to your liking, you can have notes for projects, journals, essays in folders and files bassed on your own preference.
+- Organise your notes in folders to your liking, you can have notes for projects, journals, essays in folders and files based on your own preference.
 - Do not depend on a central server to browse and edit your notes.
 - Do not depend on a proprietary desktop program to browse and edit your notes.
 - You do your own version control of notes, but if you use Git notetaker would leverage that to extract useful information.
