@@ -1,4 +1,4 @@
-# :memo: Notetaker
+# 📝 Notetaker
 ![reviewdog](https://github.com/hkdobrev/notetaker/workflows/reviewdog/badge.svg) ![Static: Active Development](https://img.shields.io/badge/Status-Active%20Development-important.svg?style=flat)
 
 
