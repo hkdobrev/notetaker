@@ -1,4 +1,6 @@
-# :memo: Notetaker <img src="https://img.shields.io/badge/Status-Active%20Development-important.svg?style=flat" alt="Status: Active Development" align="right">
+# :memo: Notetaker
+![reviewdog](https://github.com/hkdobrev/notetaker/workflows/reviewdog/badge.svg) ![Static: Active Development](https://img.shields.io/badge/Status-Active%20Development-important.svg?style=flat)
+
 
 Note taker for notes, blog posts, todo lists from the command line.
 
