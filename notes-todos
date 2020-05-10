@@ -54,7 +54,7 @@ while (( "$#" )); do
 done
 
 # set positional arguments in their proper place
-eval set -- "${FOLDERS[@]}"
+set -- "${FOLDERS[@]}"
 
 # Use regex pattern depending on todo filters
 checked=""

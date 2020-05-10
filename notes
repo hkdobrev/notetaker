@@ -22,14 +22,10 @@ if [[ $# -lt 1 ]]; then
     exit 1
 fi
 
-PARAMS=""
+PARAMS=()
 SUBCOMMAND=0
 
 while (( "$#" )); do
-    if [[ $SUBCOMMAND -eq 1 ]]; then
-        PARAMS="$PARAMS $*"
-        break
-    fi
     case "$1" in
         -h|-'?'|--help)
             echo "$__usage"
@@ -41,20 +37,25 @@ while (( "$#" )); do
             exit 1
             ;;
         new|news|list|todos|find|search) # preserve positional arguments
-            PARAMS="$PARAMS $1"
+            PARAMS+=( "$1" )
             shift
             SUBCOMMAND=1
             ;;
         *) # reject unsupported subcommands
-            echo "Error: Unsupported command \"$1\"" >&2
-            echo "$__usage" >&2
-            exit 1
+            if [[ $SUBCOMMAND -eq 1 ]]; then
+                PARAMS+=( "$1" )
+                shift
+            else
+                echo "Error: Unsupported command \"$1\"" >&2
+                echo "$__usage" >&2
+                exit 1
+            fi
             ;;
     esac
 done
 
 # set positional arguments in their proper place
-eval set -- "$PARAMS"
+set -- "${PARAMS[@]}"
 
 binary="notes-$1"
 
@@ -70,4 +71,4 @@ fi
 
 shift
 
-$binary_path "$*"
+$binary_path "$@"
