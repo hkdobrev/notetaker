@@ -32,9 +32,14 @@ while (( "$#" )); do
             exit 0
             ;;
         --*=|-*) # unsupported options
-            echo "Error: Unsupported option \"$1\"" >&2
-            echo "$__usage" >&2
-            exit 1
+            if [[ $SUBCOMMAND -eq 1 ]]; then
+                PARAMS+=( "$1" )
+                shift
+            else
+                echo "Error: Unsupported option \"$1\"" >&2
+                echo "$__usage" >&2
+                exit 1
+            fi
             ;;
         new|news|list|todos|find|search) # preserve positional arguments
             PARAMS+=( "$1" )
