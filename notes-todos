@@ -80,6 +80,6 @@ matching_files=$(grep --dereference-recursive --include=\*.md --exclude=$(basena
 for filename in $matching_files; do
     echo "${filename#$NOTES_PATH/}:" >> $OUTPUT
     echo >> $OUTPUT
-    grep --extended-regexp "$pattern" "$filename" | sed 's/.*/  &/' >> $OUTPUT
+    grep --extended-regexp "$pattern" "$filename" >> $OUTPUT
     echo >> $OUTPUT
 done
