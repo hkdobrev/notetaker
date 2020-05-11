@@ -4,7 +4,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 __usage="
-Usage: notes todos [--help | -h | -?] [--all | --done] [<folder>...]
+Usage: notes todos [--help | -h | -?] [--all | --done] [--export | -e] [<folder>...]
 
 \`notes todos\` lists all todos from your notes
 
@@ -12,6 +12,7 @@ Options:
     -h, -?, --help      Output usage
     --all, -a           List both done and not done todos
     --done, -d          List only done todos
+    --exoprt, -e        Export todos to \$NOTES_PATH/todos.md
 
 Arguments:
     <folder>            If passed folders inside your \$NOTES_PATH, will search for todos only in those recursively
@@ -26,6 +27,9 @@ FOLDERS=()
 NOT_DONE=0x1
 DONE=0x10
 MODE=$NOT_DONE
+OUTPUT=/dev/stdout
+NOTES_PATH=${NOTES_PATH:-$HOME/notes}
+TODOS_FILE="$NOTES_PATH/todos.md"
 
 while (( "$#" )); do
     case "$1" in
@@ -39,6 +43,10 @@ while (( "$#" )); do
             ;;
         --done|-d)
             MODE=$DONE
+            shift
+            ;;
+        --export|-e)
+            OUTPUT=$TODOS_FILE
             shift
             ;;
         --*=|-*) # unsupported options
@@ -63,14 +71,15 @@ checked=""
 pattern="\s*-\s*\[[$checked]\]\s*.*"
 
 # Determine note sources based on folders
-NOTES_PATH=${NOTES_PATH:-$HOME/notes}
 notes_sources=("${FOLDERS[@]/#/$NOTES_PATH\/}")
 
 matching_files=$(grep --dereference-recursive --include=\*.md --files-with-matches --extended-regexp --regexp="$pattern" "${notes_sources[@]-$NOTES_PATH}")
 
+[[ $OUTPUT == $TODOS_FILE ]] && true > $TODOS_FILE
+
 for filename in $matching_files; do
-    echo
-    echo "${filename#$NOTES_PATH/}:"
-    echo
-    grep --extended-regexp "$pattern" "$filename" | sed 's/.*/  &/'
+    echo >> $OUTPUT
+    echo "${filename#$NOTES_PATH/}:" >> $OUTPUT
+    echo >> $OUTPUT
+    grep --extended-regexp "$pattern" "$filename" | sed 's/.*/  &/' >> $OUTPUT
 done
