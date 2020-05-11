@@ -78,8 +78,8 @@ matching_files=$(grep --dereference-recursive --include=\*.md --files-with-match
 [[ $OUTPUT == $TODOS_FILE ]] && true > $TODOS_FILE
 
 for filename in $matching_files; do
-    echo >> $OUTPUT
     echo "${filename#$NOTES_PATH/}:" >> $OUTPUT
     echo >> $OUTPUT
     grep --extended-regexp "$pattern" "$filename" | sed 's/.*/  &/' >> $OUTPUT
+    echo >> $OUTPUT
 done
