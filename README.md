@@ -57,7 +57,7 @@ Options:
 ### Create a note
 
 <details>
-<summary>Just save a new Markdown file with the `*.md` extension in your notes directory (<code>~/notes</code> by default):</summary>
+<summary>Just save a new Markdown file with the `.md` extension in your notes directory (<code>~/notes</code> by default):</summary>
 <pre><code class="language-shell">
 cat > ~/notes/journal-log.md &lt;&lt;EOF
 # My first journal log
