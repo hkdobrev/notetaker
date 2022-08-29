@@ -23,9 +23,10 @@ You can filter by using ``--all\` for all todos or \`--done\` for only done todo
 "
 
 FOLDERS=()
-NOT_DONE=0x1
-DONE=0x10
-MODE=$NOT_DONE
+MODE_NOT_DONE=0x1
+MODE_DONE=0x10
+MODE_ALL=0x11
+MODE=$MODE_NOT_DONE
 OUTPUT=/dev/stdout
 NOTES_PATH=${NOTES_PATH:-$HOME/notes}
 
@@ -36,11 +37,11 @@ while (( "$#" )); do
             exit 0
             ;;
         --all|-a)
-            (( MODE|=DONE ))
+            MODE=$MODE_ALL
             shift
             ;;
         --done|-d)
-            MODE=$DONE
+            MODE=$MODE_DONE
             shift
             ;;
         --*=|-*) # unsupported options
