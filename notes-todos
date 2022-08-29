@@ -68,7 +68,7 @@ pattern="\s*-\s*\[[$checked]\]\s*.*"
 # Determine note sources based on folders
 notes_sources=("${FOLDERS[@]/#/$NOTES_PATH\/}")
 
-matching_files=$(grep --dereference-recursive --files-with-matches --extended-regexp --regexp="$pattern" --exclude="/[._]" "${notes_sources[@]-$NOTES_PATH}")
+matching_files=$(grep --recursive --files-with-matches --extended-regexp --regexp="$pattern" --exclude="_*" --exclude-dir="_*" --exclude=".*" --exclude-dir=".*" "${notes_sources[@]-$NOTES_PATH}")
 
 for filename in $matching_files; do
     {
