@@ -12,7 +12,6 @@ Options:
     -h, -?, --help      Output usage
     --all, -a           List both done and not done todos
     --done, -d          List only done todos
-    --exoprt, -e        Export todos to \$NOTES_PATH/todos.md
 
 Arguments:
     <folder>            If passed folders inside your \$NOTES_PATH, will search for todos only in those recursively
@@ -29,7 +28,6 @@ DONE=0x10
 MODE=$NOT_DONE
 OUTPUT=/dev/stdout
 NOTES_PATH=${NOTES_PATH:-$HOME/notes}
-TODOS_FILE="$NOTES_PATH/todos.md"
 
 while (( "$#" )); do
     case "$1" in
@@ -43,10 +41,6 @@ while (( "$#" )); do
             ;;
         --done|-d)
             MODE=$DONE
-            shift
-            ;;
-        --export|-e)
-            OUTPUT=$TODOS_FILE
             shift
             ;;
         --*=|-*) # unsupported options
@@ -66,16 +60,14 @@ set -- "${FOLDERS[@]}"
 
 # Use regex pattern depending on todo filters
 checked=""
-(( (MODE & DONE)     != 0 )) && checked="x$checked"
-(( (MODE & NOT_DONE) != 0 )) && checked=" $checked"
+(( (MODE & MODE_DONE)     != 0 )) && checked="x$checked"
+(( (MODE & MODE_NOT_DONE) != 0 )) && checked=" $checked"
 pattern="\s*-\s*\[[$checked]\]\s*.*"
 
 # Determine note sources based on folders
 notes_sources=("${FOLDERS[@]/#/$NOTES_PATH\/}")
 
-matching_files=$(grep --dereference-recursive --include=\*.md --exclude="$(basename "$TODOS_FILE")" --files-with-matches --extended-regexp --regexp="$pattern" "${notes_sources[@]-$NOTES_PATH}")
-
-[[ $OUTPUT == "$TODOS_FILE" ]] && true > "$TODOS_FILE"
+matching_files=$(grep --dereference-recursive --include=\*.md --files-with-matches --extended-regexp --regexp="$pattern" "${notes_sources[@]-$NOTES_PATH}")
 
 for filename in $matching_files; do
     {
