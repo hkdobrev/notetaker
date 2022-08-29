@@ -14,7 +14,7 @@ Options:
     --done, -d          List only done todos
 
 Arguments:
-    <folder>            If passed folders inside your \$NOTES_PATH, will search for todos only in those recursively
+    <folder>            If passed space-separated folders inside your \$NOTES_PATH, will search for todos only in those recursively
 
 \$NOTES_PATH defaults to ~/notes.
 
